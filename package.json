@@ -1,0 +1,36 @@
+{
+  "name": "stretch",
+  "displayName": "stretch",
+  "publisher": "grg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grgar/vscode-stretch"
+  },
+  "description": "TODO",
+  "icon": "images/icon-small.png",
+  "version": "0.0.1",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "author": {
+    "name": "grg",
+    "url": "https://grg.app",
+    "email": "vscode@grg.app"
+  },
+  "homepage": "https://github.com/grgar/vscode-stretch",
+  "qna": "https://github.com/grgar/vscode-stretch/discussions",
+  "bugs": {
+    "email": "vscode@grg.app",
+    "url": "https://github.com/grgar/vscode-stretch/issues"
+  },
+  "galleryBanner": {
+    "theme": "light",
+    "color": "#f6f8fa"
+  },
+  "contributes": {
+  }
+}
