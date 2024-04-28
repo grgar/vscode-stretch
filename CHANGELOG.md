@@ -1,4 +1,8 @@
 # Changelog
+### v0.2.2
+
+- Simplify and explain macOS keybinding difference in readme
+
 ### v0.2.1
 
 - Fix icon colour for light mode
