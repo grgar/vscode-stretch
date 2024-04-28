@@ -1,4 +1,8 @@
 # Changelog
+### v0.2.1
+
+- Fix icon colour for light mode
+
 ### v0.2.0
 
 - Remove shift in macOS shortcuts
