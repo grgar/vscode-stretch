@@ -1,20 +1,20 @@
 {
-  "name": "stretch",
-  "displayName": "stretch",
+  "name": "stretching",
+  "displayName": "Stretch",
   "publisher": "grg",
   "repository": {
     "type": "git",
     "url": "https://github.com/grgar/vscode-stretch"
   },
-  "description": "TODO",
-  "icon": "images/icon-small.png",
-  "version": "0.0.1",
+  "description": "Resize panels and sidebars with shortcuts",
+  "icon": "images/icon.png",
+  "version": "0.1.0",
   "license": "MIT",
   "engines": {
     "vscode": "^1.74.0"
   },
   "categories": [
-    "Other"
+    "Keymaps"
   ],
   "author": {
     "name": "grg",
@@ -32,5 +32,57 @@
     "color": "#f6f8fa"
   },
   "contributes": {
+    "keybindings": [
+      {
+        "key": "ctrl+alt+shift+left",
+        "command": "workbench.action.increaseViewSize",
+        "when": "auxiliaryBarFocus && !inputFocus && config.workbench.sideBar.location != 'right'"
+      },
+      {
+        "key": "ctrl+alt+shift+right",
+        "command": "workbench.action.increaseViewSize",
+        "when": "sideBarFocus && !inputFocus && config.workbench.sideBar.location != 'right'"
+      },
+      {
+        "key": "ctrl+alt+shift+left",
+        "command": "workbench.action.decreaseViewSize",
+        "when": "sideBarFocus && !inputFocus && config.workbench.sideBar.location != 'right'"
+      },
+      {
+        "key": "ctrl+alt+shift+right",
+        "command": "workbench.action.decreaseViewSize",
+        "when": "auxiliaryBarFocus && !inputFocus && config.workbench.sideBar.location != 'right'"
+      },
+      {
+        "key": "ctrl+alt+shift+right",
+        "command": "workbench.action.increaseViewSize",
+        "when": "auxiliaryBarFocus && !inputFocus && config.workbench.sideBar.location != 'right'"
+      },
+      {
+        "key": "ctrl+alt+shift+left",
+        "command": "workbench.action.increaseViewSize",
+        "when": "sideBarFocus && !inputFocus && config.workbench.sideBar.location == 'right'"
+      },
+      {
+        "key": "ctrl+alt+shift+right",
+        "command": "workbench.action.decreaseViewSize",
+        "when": "sideBarFocus && !inputFocus && config.workbench.sideBar.location == 'right'"
+      },
+      {
+        "key": "ctrl+alt+shift+left",
+        "command": "workbench.action.decreaseViewSize",
+        "when": "auxiliaryBarFocus && !inputFocus && config.workbench.sideBar.location == 'right'"
+      },
+      {
+        "key": "ctrl+alt+shift+up",
+        "command": "workbench.action.increaseViewSize",
+        "when": "panelFocus"
+      },
+      {
+        "key": "ctrl+alt+shift+down",
+        "command": "workbench.action.decreaseViewSize",
+        "when": "panelFocus"
+      }
+    ]
   }
 }

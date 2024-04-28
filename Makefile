@@ -1,6 +1,6 @@
 .SUFFIXES:
 version = $(shell git describe | tr "-" "." | awk -F. -vOFS=. '{if (NF>3) {NF=3; $$NF++;} print}' | cut -c 2-)
-name = $(notdir $(CURDIR))
+name = stretching
 file = ${name}-${version}.vsix
 vsce-flags =
 
