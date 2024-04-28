@@ -44,7 +44,7 @@
       },
       {
         "key": "ctrl+alt+shift+right",
-        "mac": "ctrl+alt+left",
+        "mac": "ctrl+alt+right",
         "command": "workbench.action.increaseViewSize",
         "when": "sideBarFocus && !inputFocus && config.workbench.sideBar.location != 'right'"
       },
