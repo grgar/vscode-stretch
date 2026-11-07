@@ -1,2 +1,5 @@
 .gitignore
 *.vsix
+.github/**
+Makefile
+package-lock.json
