@@ -1,0 +1,79 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  # workflow_dispatch only: create and push the tag via `make release`.
+  # Tags pushed with GITHUB_TOKEN never trigger workflows, so the release job
+  # below runs in this same workflow run instead of via the tag push event.
+  tag:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # version is computed from git describe
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - id: release
+        run: |
+          make release
+          echo "tag=$(git describe --exact-match)" >>"$GITHUB_OUTPUT"
+
+  release:
+    needs: tag
+    if: ${{ !cancelled() && (github.event_name == 'push' || needs.tag.result == 'success') }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      # Lets `vsce publish --oidc` request a token to authenticate with the
+      # Marketplace via a trusted publishing policy, instead of a stored PAT.
+      id-token: write
+    env:
+      TAG: ${{ needs.tag.outputs.tag || github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+      OVSX_PAT: ${{ secrets.OVSX_PAT }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.tag.outputs.tag || github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Generate release notes
+        run: gh api "repos/$GITHUB_REPOSITORY/releases/generate-notes" -f tag_name="$TAG" --jq .body >"$RUNNER_TEMP/notes.md"
+      # CHANGELOG.md is never committed; it ships only inside the .vsix,
+      # where the Marketplace renders it as the extension's changelog tab.
+      - name: Generate CHANGELOG.md
+        run: |
+          {
+            echo "# Changelog"
+            echo
+            echo "## $TAG"
+            echo
+            cat "$RUNNER_TEMP/notes.md"
+            echo
+            gh api "repos/$GITHUB_REPOSITORY/releases" --paginate \
+              --jq '.[] | select((.draft | not) and .tag_name != env.TAG) | "## \(.tag_name)\n\n\(.body)\n"'
+          } >CHANGELOG.md
+      - name: Package
+        run: npx vsce package "${TAG#v}" --no-git-tag-version --no-update-package-json
+      - name: Publish to Visual Studio Marketplace
+        run: npx vsce publish --oidc -i *.vsix
+      - name: Publish to Open VSX
+        if: env.OVSX_PAT != ''
+        run: npx ovsx publish *.vsix
+      - name: Create GitHub release
+        run: gh release create "$TAG" --notes-file "$RUNNER_TEMP/notes.md" *.vsix
